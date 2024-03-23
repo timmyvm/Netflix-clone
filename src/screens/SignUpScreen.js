@@ -7,7 +7,7 @@ const SignUpScreen = (  ) => {
     event.preventDefault();
 
     auth
-      .createUseWithEmailAndPassword(
+      .createUserWithEmailAndPassword(
         emailRef.current.value,
         passwordRef.current.value
       )
@@ -21,6 +21,16 @@ const SignUpScreen = (  ) => {
 
   const signIn = (event) => {
     event.preventDefault();
+
+    auth.signInWithEmailAndPassword(
+      emailRef.current.value,
+        passwordRef.current.value
+    ).then((authUser) => {
+      console.log(authUser)
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
   };
 
   const emailRef = useRef(null);
