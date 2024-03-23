@@ -76,18 +76,37 @@ const PlanScreen = () => {
 
   return (
     <div className="planScreen">
+      {subscription && (
+        <p>
+          Your Plan renews at:{" "}
+          {new Date(
+            subscription?.current_period_end * 1000
+          ).toLocaleDateString()}
+        </p>
+      )}{" "}
       {Object.entries(products).map(([productId, productData]) => {
+        const isCurrentPackage = productData.name
+          ?.toLowerCase()
+          .includes(subscription?.role);
+
         return (
-          <div className="planScreen__plan">
+          <div
+            key={productId}
+            className={`planScreen__plan ${
+              isCurrentPackage && "plan__disabled"
+            }`}
+          >
             <div className="planScreen__info">
               <h5>{productData.name}</h5>
               <h6>{productData.description}</h6>
             </div>
             <button
               className="planScreen__button"
-              onClick={() => loadCheckout(productData.prices.priceId)}
+              onClick={() =>
+                !isCurrentPackage && loadCheckout(productData.prices.priceId)
+              }
             >
-              Subscribe
+              {isCurrentPackage ? "Current Package" : "Subscribe"}
             </button>
           </div>
         );
