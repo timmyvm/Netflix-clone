@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RowCSS from "./Row.css";
 import axios from "./axios";
 
-const Row = ({ title, fetchURL, isLargeRow = false }) => {
+const Row = ({ title, fetchURL, isLargeRow = false, isBigger = false }) => {
   const [movies, setMovies] = useState([]);
 
   const base_url = "https://image.tmdb.org/t/p/original/";
@@ -27,15 +27,19 @@ const Row = ({ title, fetchURL, isLargeRow = false }) => {
         {movies &&
           movies.map((movie) =>
             (isLargeRow && movie.poster_path) ||
-            (!isLargeRow && movie.backdrop_path) ? (
-              <img
-                className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-                key={movie.id}
-                src={`${base_url}${
-                  isLargeRow ? movie.poster_path : movie.backdrop_path
-                }`}
-                alt={movie.name}
-              />
+            (isBigger && movie.backdrop_path) ? (
+              <>
+                <img
+                  className={`row__poster ${isLargeRow && "row__posterLarge"} ${
+                    isBigger && "isBiggerPoster"
+                  }`}
+                  key={movie.id}
+                  src={`${base_url}${
+                    isLargeRow ? movie.poster_path : movie.backdrop_path
+                  }`}
+                  alt={movie.name}
+                />
+              </>
             ) : null
           )}
       </div>

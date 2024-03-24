@@ -7,6 +7,8 @@ import { auth } from "./firebaseFile";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser } from "./app/features/counter/userSlice";
 import ProfileScreen from "./screens/ProfileScreen";
+import ShowsScreen from "./screens/ShowsScreen";
+import MoviesScreen from "./screens/MoviesScreen";
 
 function App() {
   const user = useSelector(selectUser);
@@ -39,6 +41,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/movies" element={<MoviesScreen/>}/>
+            <Route path="/shows" element={<ShowsScreen/>}/>
           </Routes>
         )}
       </Router>

@@ -35,3 +35,17 @@
     width: 30px;
     cursor: pointer;
 }
+
+.nav__left{
+    display: flex;
+    gap: 50px;
+    text-decoration: none;
+    padding-left: 7%;
+}
+
+.nav__link{
+    color: white;
+    text-decoration: none;
+    padding-top: 7px;
+
+}

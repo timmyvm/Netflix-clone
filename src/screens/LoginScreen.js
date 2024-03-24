@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import LoginCSS from "./loginScreen.css";
+import "./loginScreen.css";
 import SignUpScreen from "./SignUpScreen";
 
 const LoginScreen = () => {
+
+  
 
 const [signIn, setSignIn] = useState(false)
 
@@ -21,19 +23,9 @@ return (
           <SignUpScreen/>
         ) : (
           <>
-            <h1 className="loginScreen__title">
-              Unlimited films, TV Programmes and more.
-            </h1>
-            <h2 className="loginScreen__subtitle">
-              Watch anywhere. Cancel at anytime.
-            </h2>
-            <h3 className="loginScreen__undertitle">
-              Ready to watch? Enter your email to create or restart your membership.
-            </h3>
             <div className="loginScreen__input">
               <form>
-                <input className="loginScreen__input__input" type="email" placeholder="Email Address" />
-                <button className="loginScreen__getStarted" onClick={() => setSignIn(true)}> Get Started</button>
+                <button className="loginScreen__getStarted" onClick={() => setSignIn(true)}> Get Started Today!</button>
               </form>
             </div>
           </>
