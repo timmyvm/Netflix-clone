@@ -1,8 +1,9 @@
 import React from 'react';
 
+
 const AllDisplay = () => {
     return (
-        <div>
+        <div className='allDislay'>
             
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import signUpCSS from "./SignUpScreen.css";
+import "./SignUpScreen.css";
 import { auth } from "../firebaseFile.js";
 
 const SignUpScreen = (  ) => {
@@ -39,7 +39,7 @@ const SignUpScreen = (  ) => {
   return (
     <div className="signUpScreen">
       <form>
-        <h1>Sign In</h1>
+        <h1>Log in</h1>
         <input
           ref={emailRef}
           type="email"

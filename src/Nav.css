@@ -43,9 +43,12 @@
     padding-left: 7%;
 }
 
+a {
+    text-decoration: none;
+}
+
 .nav__link{
     color: white;
     text-decoration: none;
     padding-top: 7px;
-
 }

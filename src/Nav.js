@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NavCSS from "./Nav.css";
+import "./Nav.css";
 import { Link } from "react-router-dom";
 import Avatar from "../src/assets/download.png";
 
@@ -38,9 +38,11 @@ const Nav = () => {
           </Link>
         </div>
 
-        <Link to={"/profile"}>
-          <img className="nav__avatar" src={Avatar} />
-        </Link>
+        <div>
+          <Link to={"/profile"}>
+            <img className="nav__avatar" src={Avatar} />
+          </Link>
+        </div>
       </div>
     </div>
   );
