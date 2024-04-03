@@ -3,13 +3,12 @@ import axios from "../axios.js";
 import Movie from "../Movie";
 import "./MoviesScreen.css";
 import requests from "../Request.js";
-import Nav from "../Nav.js";
 import { Link } from "react-router-dom";
 import Avatar from "../../src/assets/download.png";
 
 const MoviesScreen = () => {
   const [movies, setMovies] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async (fetchURL) => {
     try {
@@ -34,19 +33,22 @@ const MoviesScreen = () => {
 
     const allMovies = [];
     for (const fetchURL of fetchURLs) {
-      allMovies.push(...(await fetchData(fetchURL)));
+      const movies = await fetchData(fetchURL);
+      movies.forEach((movie) => {
+        if (!allMovies.some((existingMovie) => existingMovie.id === movie.id)) {
+          allMovies.push(movie);
+        }
+      });
     }
     setMovies(allMovies);
   };
 
-  const searchMovies = async (event) => {
-    event.preventDefault();
-    setMovies([]); 
+  const searchMovies = async () => {
     const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
-  
+
     try {
-      if (searchTerm.trim() === '') {
-        fetchMoviesByGenres(); 
+      if (searchTerm.trim() === "") {
+        fetchMoviesByGenres();
       } else {
         const response = await axios.get(searchURL);
         setMovies(response.data.results || []);
@@ -56,13 +58,15 @@ const MoviesScreen = () => {
       setMovies([]);
     }
   };
-  
-  
-  
 
   useEffect(() => {
     fetchMoviesByGenres();
   }, []);
+
+  useEffect(() => {
+    const delaySearch = setTimeout(searchMovies, 300); // Add a delay of 300ms before triggering the search
+    return () => clearTimeout(delaySearch); // Clear the timeout on component unmount
+  }, [searchTerm]);
 
   return (
     <>
@@ -94,17 +98,20 @@ const MoviesScreen = () => {
 
       <div className="moviesScreen">
         <div className="container">
-          <form className="search__bar__container" onSubmit={searchMovies}>
+          <form className="search__bar__container">
             <input
               className="search__bar"
               type="text"
-              placeholder="Press enter to search"
+              placeholder="Search "
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </form>
         </div>
-        <h1 className="movies__title">Popular movies</h1>
+        <h1 className="movies__title">
+          {searchTerm ? `Search results for "${searchTerm}"` : "Popular movies"}
+        </h1>
+
         <div className="movies__content">
           {movies.map((movie) => (
             <Movie

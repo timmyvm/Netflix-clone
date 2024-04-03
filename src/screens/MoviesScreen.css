@@ -4,6 +4,10 @@
     padding: 20px; /* Add padding for better spacing */
 }
 
+body{
+  background-color: #111;
+}
+
 .movies__title{
     color: white;
     margin-left: 20px;
