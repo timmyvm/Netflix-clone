@@ -40,11 +40,13 @@
     z-index: 100;
     transition-timing-function: ease-in;
     transition: all 0.5s;
+    padding-top: 10px ;
   }
   
   .navM__contents {
     display: flex;
     justify-content: space-between;
+    padding-top: 10px ;
   }
   
   .navM__logo {
@@ -63,6 +65,7 @@
     top: 25px;
     width: 30px;
     cursor: pointer;
+
   }
   
   .navM__left {
@@ -76,6 +79,25 @@
     color: white;
     text-decoration: none;
     padding-top: 7px;
+  }
+
+  .search__bar{
+    border: 2px solid black;
+    outline: black;
+    font-size: 16px;
+    border-radius: 3px;
+    padding: 15px 20px;
+    background-color:transparent;
+    color: white;
+  }
+
+  .search__button{
+    padding: 16px 21px;
+    font-size: 16px;
+    border-radius: 3px;
+    border: none;
+    outline: none;
+    cursor: zoom-in;
   }
 
   

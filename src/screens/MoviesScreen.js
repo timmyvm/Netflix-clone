@@ -9,6 +9,7 @@ import Avatar from "../../src/assets/download.png";
 
 const MoviesScreen = () => {
   const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchData = async (fetchURL) => {
     try {
@@ -37,6 +38,27 @@ const MoviesScreen = () => {
     }
     setMovies(allMovies);
   };
+
+  const searchMovies = async (event) => {
+    event.preventDefault();
+    setMovies([]); 
+    const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
+  
+    try {
+      if (searchTerm.trim() === '') {
+        fetchMoviesByGenres(); 
+      } else {
+        const response = await axios.get(searchURL);
+        setMovies(response.data.results || []);
+      }
+    } catch (error) {
+      console.error("Error searching movies:", error);
+      setMovies([]);
+    }
+  };
+  
+  
+  
 
   useEffect(() => {
     fetchMoviesByGenres();
@@ -72,16 +94,25 @@ const MoviesScreen = () => {
 
       <div className="moviesScreen">
         <div className="container">
-          <h1 className="movies__title">Popular movies</h1>
-          <div className="movies__content">
-            {movies.map((movie) => (
-              <Movie
-                key={movie.id}
-                title={movie.title}
-                posterPath={movie.poster_path}
-              />
-            ))}
-          </div>
+          <form className="search__bar__container" onSubmit={searchMovies}>
+            <input
+              className="search__bar"
+              type="text"
+              placeholder="Press enter to search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </form>
+        </div>
+        <h1 className="movies__title">Popular movies</h1>
+        <div className="movies__content">
+          {movies.map((movie) => (
+            <Movie
+              key={movie.id}
+              title={movie.title}
+              posterPath={movie.poster_path}
+            />
+          ))}
         </div>
       </div>
     </>
