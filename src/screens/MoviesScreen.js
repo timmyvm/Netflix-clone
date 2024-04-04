@@ -107,19 +107,22 @@ const MoviesScreen = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </form>
-        </div>
-        <h1 className="movies__title">
-          {searchTerm ? `Search results for "${searchTerm}"` : "Popular movies"}
-        </h1>
 
-        <div className="movies__content">
-          {movies.map((movie) => (
-            <Movie
-              key={movie.id}
-              title={movie.title}
-              posterPath={movie.poster_path}
-            />
-          ))}
+          <h1 className="movies__title">
+            {searchTerm
+              ? `Search results for "${searchTerm}"`
+              : "Popular movies"}
+          </h1>
+
+          <div className="movies__content">
+            {movies.map((movie) => (
+              <Movie
+                key={movie.id}
+                title={movie.title}
+                posterPath={movie.poster_path}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>

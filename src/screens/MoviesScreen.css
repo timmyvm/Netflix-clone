@@ -1,7 +1,7 @@
 /* Movie.css */
 .moviesScreen {
     background-color: #111;
-    padding: 20px; /* Add padding for better spacing */
+    
 }
 
 body{
@@ -10,24 +10,24 @@ body{
 
 .movies__title{
     color: white;
-    margin-left: 20px;
     margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .container {
     max-width: 1200px; /* Adjust max-width as needed */
-    margin: 0 auto; /* Center the container */
+    margin: 0 auto; 
 }
 
 .movies__content{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 20px; /* Gap between items */
+    gap: 20px; 
 }
 
 .movie {
-    width: calc(25% - 20px); /* 4 items per row with 20px margin */
+    width: calc(25% - 20px); 
     max-height: 350px;
     object-fit: contain;
     margin-bottom: 20px;
@@ -95,15 +95,11 @@ body{
     color: white;
   }
 
-  .search__button{
-    padding: 16px 21px;
-    font-size: 16px;
-    border-radius: 3px;
-    border: none;
-    outline: none;
-    cursor: zoom-in;
+  .search__bar__container{
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-bottom: 30px;
   }
-
   
   
   
