@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RowCSS from "./Row.css";
+import "./Row.css";
 import axios from "./axios";
 
 const Row = ({ title, fetchURL, isLargeRow = false, isBigger = false }) => {

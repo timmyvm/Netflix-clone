@@ -5,6 +5,9 @@ import "./MoviesScreen.css";
 import requests from "../Request.js";
 import { Link } from "react-router-dom";
 import Avatar from "../../src/assets/download.png";
+import NoPoster from "../../src/assets/FoxAndroidTM2's_No_Poster.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const MoviesScreen = () => {
   const [movies, setMovies] = useState([]);
@@ -43,7 +46,11 @@ const MoviesScreen = () => {
     setMovies(allMovies);
   };
 
-  const searchMovies = async () => {
+  const searchMovies = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
     const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
 
     try {
@@ -64,8 +71,8 @@ const MoviesScreen = () => {
   }, []);
 
   useEffect(() => {
-    const delaySearch = setTimeout(searchMovies, 300); // Add a delay of 300ms before triggering the search
-    return () => clearTimeout(delaySearch); // Clear the timeout on component unmount
+    const delaySearch = setTimeout(searchMovies, 300);
+    return () => clearTimeout(delaySearch);
   }, [searchTerm]);
 
   return (
@@ -98,15 +105,30 @@ const MoviesScreen = () => {
 
       <div className="moviesScreen">
         <div className="container">
-          <form className="search__bar__container">
-            <input
-              className="search__bar"
-              type="text"
-              placeholder="Search "
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </form>
+          <div className="above__title">
+            <form
+              className="search__bar__container"
+              onSubmit={(e) => searchMovies(e)}
+            >
+              <input
+                className="search__bar"
+                type="text"
+                placeholder="Search "
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button type="submit" className="search__button">
+                <FontAwesomeIcon className="faSearch" icon={faSearch} />
+              </button>
+            </form>
+
+            <select>
+              <option value="Popular" selected disabled>
+                Popular
+              </option>
+              <option value="Rating"> Rating </option>
+            </select>
+          </div>
 
           <h1 className="movies__title">
             {searchTerm
@@ -119,7 +141,7 @@ const MoviesScreen = () => {
               <Movie
                 key={movie.id}
                 title={movie.title}
-                posterPath={movie.poster_path}
+                posterPath={movie.poster_path ? movie.poster_path : NoPoster}
               />
             ))}
           </div>
