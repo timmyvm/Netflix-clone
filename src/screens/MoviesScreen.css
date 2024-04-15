@@ -17,7 +17,6 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
   padding: 20px;
   border-radius: 3px;
 }
@@ -101,12 +100,12 @@ body{
   }
 
   .search__bar{
-    border: 2px solid black;
+    border:none;
     outline: black;
     font-size: 16px;
-    border-radius: 3px;
+    border-radius:3px 0 0 3px ;
     padding: 15px 20px;
-    background-color:transparent;
+    background-color :#333;
     color: white;
     width: 50%;
     border-right: none;
@@ -121,24 +120,20 @@ body{
   }
 
   select{
-    -webkit-appearance: button;
-    -webkit-border-radius: 2px;
-    -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.1);
-    -webkit-padding-end: 20px;
-    -webkit-padding-start: 2px;
-    -webkit-user-select: none;
     background-color: #333;
-    color: white;
-    border: 2px solid black;
-    border-radius: 3px 0 0 3px;
+    border-radius:3px;
     padding: 15px 20px;
-
+    outline: none;
+    color: white;
+    border: none ;
+    cursor: pointer;
   }
 
   .search__button{
-    background-color: #4d98de;
-    border: 2px solid black;
+    background-color: #333;
+    border: none;
     outline: none;
+    color: white;
     border-radius:  0 3px 3px 0; 
     border-left: none;
   }

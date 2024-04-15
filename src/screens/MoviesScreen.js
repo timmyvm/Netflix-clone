@@ -122,11 +122,26 @@ const MoviesScreen = () => {
               </button>
             </form>
 
-            <select>
-              <option value="Popular" selected disabled>
+            <select className="filter___dropdown">
+              <option
+                className="filter___dropdown__option"
+                value="Popular"
+                selected
+              >
                 Popular
               </option>
-              <option value="Rating"> Rating </option>
+              <option className="filter___dropdown__option" value="Rating">
+                Rating
+              </option>
+              <option className="filter___dropdown__option" value="AZ">
+                A-Z
+              </option>
+              <option className="filter___dropdown__option" value="Oldest">
+                Oldest
+              </option>
+              <option className="filter___dropdown__option" value="Newest">
+                Newest
+              </option>
             </select>
           </div>
 
