@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../axios.js";
 import Movie from "../Movie";
 import "./MoviesScreen.css";
+import GenreTags from '../GenreTags.js'
 import requests from "../Request.js";
 import { Link } from "react-router-dom";
 import Avatar from "../../src/assets/download.png";
@@ -23,6 +24,7 @@ const MoviesScreen = () => {
     }
   };
 
+
   const fetchMoviesByGenres = async () => {
     const fetchURLs = [
       requests.fetchTrending,
@@ -41,7 +43,7 @@ const MoviesScreen = () => {
         if (!allMovies.some((existingMovie) => existingMovie.id === movie.id)) {
           allMovies.push(movie);
         }
-      });
+      }); 
     }
     setMovies(allMovies);
   };
@@ -84,6 +86,7 @@ const MoviesScreen = () => {
               <img
                 className="navM__logo"
                 src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
+                alt="Netflix Logo"
               />
             </Link>
 
@@ -97,7 +100,7 @@ const MoviesScreen = () => {
 
           <div>
             <Link to={"/profile"}>
-              <img className="navM__avatar" src={Avatar} />
+              <img className="navM__avatar" src={Avatar} alt="Profile Avatar" />
             </Link>
           </div>
         </div>
@@ -126,7 +129,7 @@ const MoviesScreen = () => {
               <option
                 className="filter___dropdown__option"
                 value="Popular"
-                selected
+                defaultValue
               >
                 Popular
               </option>
@@ -144,6 +147,8 @@ const MoviesScreen = () => {
               </option>
             </select>
           </div>
+
+          <GenreTags setMovies={setMovies} />
 
           <h1 className="movies__title">
             {searchTerm
