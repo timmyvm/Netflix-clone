@@ -13,6 +13,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 const MoviesScreen = () => {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("popularity.desc");
 
   const fetchData = async (fetchURL) => {
     try {
@@ -24,8 +25,7 @@ const MoviesScreen = () => {
     }
   };
 
-
-  const fetchMoviesByGenres = async () => {
+  const fetchMoviesByGenres = async (sort) => {
     const fetchURLs = [
       requests.fetchTrending,
       requests.fetchTopRated,
@@ -38,14 +38,24 @@ const MoviesScreen = () => {
 
     const allMovies = [];
     for (const fetchURL of fetchURLs) {
-      const movies = await fetchData(fetchURL);
+      const movies = await fetchData(fetchURL + `&sort_by=${sort}`);
       movies.forEach((movie) => {
         if (!allMovies.some((existingMovie) => existingMovie.id === movie.id)) {
           allMovies.push(movie);
         }
-      }); 
+      });
     }
     setMovies(allMovies);
+  };
+
+  const fetchMoviesSortedByRating = async () => {
+    try {
+      const movies = await fetchData(requests.fetchTopRated + `&sort_by=vote_average.desc`);
+      setMovies(movies);
+    } catch (error) {
+      console.error("Error fetching movies sorted by rating:", error);
+      setMovies([]);
+    }
   };
 
   const searchMovies = async (e) => {
@@ -57,7 +67,7 @@ const MoviesScreen = () => {
 
     try {
       if (searchTerm.trim() === "") {
-        fetchMoviesByGenres();
+        fetchMoviesByGenres(sortBy);
       } else {
         const response = await axios.get(searchURL);
         setMovies(response.data.results || []);
@@ -69,8 +79,12 @@ const MoviesScreen = () => {
   };
 
   useEffect(() => {
-    fetchMoviesByGenres();
-  }, []);
+    if (sortBy === "vote_average.desc") {
+      fetchMoviesSortedByRating();
+    } else {
+      fetchMoviesByGenres(sortBy);
+    }
+  }, [sortBy]);
 
   useEffect(() => {
     const delaySearch = setTimeout(searchMovies, 300);
@@ -125,25 +139,16 @@ const MoviesScreen = () => {
               </button>
             </form>
 
-            <select className="filter___dropdown">
-              <option
-                className="filter___dropdown__option"
-                value="Popular"
-                defaultValue
-              >
+            <select
+              className="filter___dropdown"
+              onChange={(e) => setSortBy(e.target.value)}
+              value={sortBy}
+            >
+              <option className="filter___dropdown__option" value="popularity.desc">
                 Popular
               </option>
-              <option className="filter___dropdown__option" value="Rating">
+              <option className="filter___dropdown__option" value="vote_average.desc">
                 Rating
-              </option>
-              <option className="filter___dropdown__option" value="AZ">
-                A-Z
-              </option>
-              <option className="filter___dropdown__option" value="Oldest">
-                Oldest
-              </option>
-              <option className="filter___dropdown__option" value="Newest">
-                Newest
               </option>
             </select>
           </div>

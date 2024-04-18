@@ -52,3 +52,17 @@ a {
     text-decoration: none;
     padding-top: 7px;
 }
+
+@media (max-width: 1224px) {
+
+    .nav__left{
+        margin-left: 80px;
+    }
+}
+
+@media (max-width: 448px) {
+
+    .nav__left{
+        font-size: 85%;
+    }
+}

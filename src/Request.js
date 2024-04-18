@@ -17,3 +17,5 @@ const requests = {
 export default requests;
 
 // https://api.themoviedb.org/3/genre/movie/list?api_key=3ef16179b4be2afc7c81bf6333abb5b5
+
+// https://api.themoviedb.org/3/discover/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&sort_by=vote_average.desc

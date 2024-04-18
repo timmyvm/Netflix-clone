@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Row.css";
 import axios from "./axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
 
 const Row = ({ title, fetchURL, isLargeRow = false, isBigger = false }) => {
   const [movies, setMovies] = useState([]);
