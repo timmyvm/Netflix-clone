@@ -1,0 +1,25 @@
+.skeleton-movie {
+    width: calc(25% - 20px); 
+    max-height: 350px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background: linear-gradient(
+      -90deg,
+      rgba(200, 200, 200, 0),
+      rgba(200, 200, 200, 0.5),
+      rgba(200, 200, 200, 0)
+    );
+    background-size: 400% 400%;
+    animation: skeleton-animation 1.5s ease infinite;
+  }
+  
+  @keyframes skeleton-animation {
+    0% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: -100% 50%;
+    }
+  }
+  

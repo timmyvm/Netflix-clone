@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import axios from "../axios.js";
 import Movie from "../Movie";
 import "./MoviesScreen.css";
-import GenreTags from '../GenreTags.js'
+import GenreTags from "../GenreTags.js";
 import requests from "../Request.js";
 import { Link } from "react-router-dom";
 import Avatar from "../../src/assets/download.png";
 import NoPoster from "../../src/assets/FoxAndroidTM2's_No_Poster.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import SkeletonMovie from "../SkeletonMovie.js";
 
 const MoviesScreen = () => {
-  const [movies, setMovies] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("popularity.desc");
 
-  const fetchData = async (fetchURL) => {
+  const fetchData = useCallback(async (fetchURL) => {
     try {
       const response = await axios.get(fetchURL);
       return response.data.results;
@@ -23,9 +23,9 @@ const MoviesScreen = () => {
       console.error("Error fetching data:", error);
       return [];
     }
-  };
+  }, []);
 
-  const fetchMoviesByGenres = async (sort) => {
+  const fetchMoviesByGenres = useCallback(async (sort) => {
     const fetchURLs = [
       requests.fetchTrending,
       requests.fetchTopRated,
@@ -46,19 +46,21 @@ const MoviesScreen = () => {
       });
     }
     setMovies(allMovies);
-  };
+  }, [fetchData]);
 
-  const fetchMoviesSortedByRating = async () => {
+  const fetchMoviesSortedByRating = useCallback(async () => {
     try {
-      const movies = await fetchData(requests.fetchTopRated + `&sort_by=vote_average.desc`);
+      const movies = await fetchData(
+        requests.fetchTopRated + `&sort_by=vote_average.desc`
+      );
       setMovies(movies);
     } catch (error) {
       console.error("Error fetching movies sorted by rating:", error);
       setMovies([]);
     }
-  };
+  }, [fetchData]);
 
-  const searchMovies = async (e) => {
+  const searchMovies = useCallback(async (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -76,7 +78,7 @@ const MoviesScreen = () => {
       console.error("Error searching movies:", error);
       setMovies([]);
     }
-  };
+  }, [searchTerm, sortBy, fetchMoviesByGenres]);
 
   useEffect(() => {
     if (sortBy === "vote_average.desc") {
@@ -84,12 +86,32 @@ const MoviesScreen = () => {
     } else {
       fetchMoviesByGenres(sortBy);
     }
-  }, [sortBy]);
+  }, [sortBy, fetchMoviesByGenres, fetchMoviesSortedByRating]);
+
+  const handleSearchTermChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleSortByChange = useCallback((e) => {
+    setSortBy(e.target.value);
+  }, []);
+
+  const debouncedSearchMovies = useMemo(() => {
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    };
+    return debounce(searchMovies, 300);
+  }, [searchMovies]);
 
   useEffect(() => {
-    const delaySearch = setTimeout(searchMovies, 300);
-    return () => clearTimeout(delaySearch);
-  }, [searchTerm]);
+    debouncedSearchMovies();
+  }, [debouncedSearchMovies]);
 
   return (
     <>
@@ -125,14 +147,14 @@ const MoviesScreen = () => {
           <div className="above__title">
             <form
               className="search__bar__container"
-              onSubmit={(e) => searchMovies(e)}
+              onSubmit={(e) => debouncedSearchMovies(e)}
             >
               <input
                 className="search__bar"
                 type="text"
                 placeholder="Search "
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchTermChange}
               />
               <button type="submit" className="search__button">
                 <FontAwesomeIcon className="faSearch" icon={faSearch} />
@@ -141,13 +163,19 @@ const MoviesScreen = () => {
 
             <select
               className="filter___dropdown"
-              onChange={(e) => setSortBy(e.target.value)}
+              onChange={handleSortByChange}
               value={sortBy}
             >
-              <option className="filter___dropdown__option" value="popularity.desc">
+              <option
+                className="filter___dropdown__option"
+                value="popularity.desc"
+              >
                 Popular
               </option>
-              <option className="filter___dropdown__option" value="vote_average.desc">
+              <option
+                className="filter___dropdown__option"
+                value="vote_average.desc"
+              >
                 Rating
               </option>
             </select>
@@ -162,13 +190,19 @@ const MoviesScreen = () => {
           </h1>
 
           <div className="movies__content">
-            {movies.map((movie) => (
-              <Movie
-                key={movie.id}
-                title={movie.title}
-                posterPath={movie.poster_path ? movie.poster_path : NoPoster}
-              />
-            ))}
+            {movies.length < 0
+              ? movies.map((movie) => (
+                  <Movie
+                    key={movie.id}
+                    title={movie.title}
+                    posterPath={
+                      movie.poster_path ? movie.poster_path : NoPoster
+                    }
+                  />
+                ))
+              : Array.from({ length: 20 }).map((_, index) => (
+                  <SkeletonMovie key={index} />
+                ))}
           </div>
         </div>
       </div>
