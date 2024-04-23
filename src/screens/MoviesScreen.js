@@ -190,7 +190,7 @@ const MoviesScreen = () => {
           </h1>
 
           <div className="movies__content">
-            {movies.length < 0
+            {movies.length > 0
               ? movies.map((movie) => (
                   <Movie
                     key={movie.id}
