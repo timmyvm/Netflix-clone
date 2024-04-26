@@ -7,6 +7,7 @@ function SkeletonMovie() {
   return (
     <div className="skeleton-movie">
       
+
     </div>
   );
 }

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axios.js";
+import requests from "../Request.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Movie from "../Movie";
 import { Link } from "react-router-dom";
-import GenreTags from "../GenreTags";
+import TVShowsGenreTags from "../TVShowsGenreTags .js"; 
 import Avatar from "../../src/assets/download.png";
 import "./MoviesScreen.css";
+import SkeletonMovie from "../SkeletonMovie";
 
-const ShowsScreen = ( { setMovies } ) => {
+const ShowsScreen = ({ setMovies }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [shows, setShows] = useState([]);
   const [sortBy, setSortBy] = useState("popularity.desc");
@@ -27,6 +29,10 @@ const ShowsScreen = ( { setMovies } ) => {
     }
   };
 
+  const handleTagClick = async (id) => {
+    fetchMoviesByGenres(id);
+  };
+
   const fetchMoviesSortedByRating = async () => {
     const URL = `https://api.themoviedb.org/3/tv/popular?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1&include_adult=false`;
 
@@ -40,10 +46,9 @@ const ShowsScreen = ( { setMovies } ) => {
   };
 
   const searchMovies = async (e) => {
-    if(e){
-        e.preventDefault();
+    if (e) {
+      e.preventDefault();
     }
-   
 
     const searchURL = `https://api.themoviedb.org/3/search/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
 
@@ -126,16 +131,23 @@ const ShowsScreen = ( { setMovies } ) => {
               onChange={(e) => setSortBy(e.target.value)}
               value={sortBy}
             >
-              <option className="filter___dropdown__option" value="popularity.desc">
+              <option
+                className="filter___dropdown__option"
+                value="popularity.desc"
+              >
                 Popular
               </option>
-              <option className="filter___dropdown__option" value="vote_average.desc">
+              <option
+                className="filter___dropdown__option"
+                value="vote_average.desc"
+              >
                 Rating
               </option>
             </select>
           </div>
 
-          <GenreTags  fetchMoviesByGenres={fetchMoviesByGenres} />
+         
+          <TVShowsGenreTags setShows={setShows} handleTagClick={handleTagClick} />
 
           <h1 className="movies__title">
             {searchTerm
@@ -144,13 +156,17 @@ const ShowsScreen = ( { setMovies } ) => {
           </h1>
 
           <div className="movies__content">
-            {shows.map((show) => (
-              <Movie
-                key={show.id}
-                title={show.name}
-                posterPath={ `https://image.tmdb.org/t/p/original${show.poster_path}`}
-              />
-            ))}
+            {shows.length > 0
+              ? shows.map((show) => (
+                  <Movie
+                    key={show.id}
+                    title={show.name}
+                    posterPath={`https://image.tmdb.org/t/p/original${show.poster_path}`}
+                  />
+                ))
+              : Array.from({ length: 20 }).map((_, index) => (
+                  <SkeletonMovie key={index} />
+                ))}
           </div>
         </div>
       </div>

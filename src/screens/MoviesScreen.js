@@ -12,7 +12,8 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SkeletonMovie from "../SkeletonMovie.js";
 
 const MoviesScreen = () => {
-  const [movies, setMovies] = useState([]);const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("popularity.desc");
 
   const fetchData = useCallback(async (fetchURL) => {

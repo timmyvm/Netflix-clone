@@ -45,12 +45,13 @@
 
   .arrow{
     background-color: #e63535;
-    border-radius: 999px;
+    border-radius: 8px;
     font-size: 20px;
     border: none;
     outline: none;
-    margin: 0 5px;
+    margin: 5px;
     user-select: none;
+    cursor: pointer;
   }
 
   

@@ -1,6 +1,7 @@
 .skeleton-movie {
     width: calc(25% - 20px); 
     height: 350px;
+    max-height: 350px;
     object-fit: contain;
     margin-bottom: 20px;
     border-radius: 4px;

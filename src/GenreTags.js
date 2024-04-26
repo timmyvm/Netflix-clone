@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const GenreTags = ({ setMovies }) => {
+const GenreTags = ({ setMovies, setShows = () => {} }) => {
   const [clickedTags, setClickedTags] = useState([]);
 
   const genresData = [
@@ -92,16 +92,22 @@ const GenreTags = ({ setMovies }) => {
     }
     setClickedTags(updatedTags);
 
-    // Fetch movies based on selected genres
-    const fetchURL = `https://api.themoviedb.org/3/discover/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
+    
+    const fetchURLMovies = `https://api.themoviedb.org/3/discover/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
+      ","
+    )}`;
+    const fetchURLShows = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
       ","
     )}`;
     try {
-      const response = await axios.get(fetchURL);
-      setMovies(response.data.results || []);
+      const responseMovies = await axios.get(fetchURLMovies);
+      const responseShows = await axios.get(fetchURLShows);
+      setMovies(responseMovies.data.results || []);
+      setShows(responseShows.data.results || []);
     } catch (error) {
-      console.error("Error fetching movies:", error);
+      console.error("Error fetching data:", error);
       setMovies([]);
+      setShows([]);
     }
   };
 
