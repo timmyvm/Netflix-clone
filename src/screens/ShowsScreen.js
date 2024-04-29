@@ -1,82 +1,68 @@
 import React, { useState, useEffect } from "react";
 import axios from "../axios.js";
-import requests from "../Request.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Movie from "../Movie";
-import { Link } from "react-router-dom";
-import TVShowsGenreTags from "../TVShowsGenreTags .js"; 
+import TVShowsGenreTags from "../TVShowsGenreTags .js";
 import Avatar from "../../src/assets/download.png";
 import "./MoviesScreen.css";
 import SkeletonMovie from "../SkeletonMovie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const ShowsScreen = ({ setMovies }) => {
+const ShowsScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [shows, setShows] = useState([]);
   const [sortBy, setSortBy] = useState("popularity.desc");
   const { genre } = useParams();
 
-  const fetchMoviesByGenres = async (genreId) => {
-    const URL = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&with_genres=${genreId}&sort_by=${sortBy}&page=1&include_adult=false`;
-
+  const fetchShows = async (url) => {
     try {
-      const response = await axios.get(URL);
-      setShows(response.data.results || []);
+      const response = await axios.get(url);
+      return response.data.results || [];
     } catch (error) {
-      console.error("Error fetching shows by genre:", error);
-      setShows([]);
+      console.error("Error fetching shows:", error);
+      return [];
     }
   };
 
-  const handleTagClick = async (id) => {
-    fetchMoviesByGenres(id);
+  const fetchMoviesByGenres = async (genreId) => {
+    const url = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&with_genres=${genreId}&sort_by=${sortBy}&page=1&include_adult=false`;
+    return fetchShows(url);
   };
 
   const fetchMoviesSortedByRating = async () => {
-    const URL = `https://api.themoviedb.org/3/tv/popular?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1&include_adult=false`;
-
-    try {
-      const response = await axios.get(URL);
-      setShows(response.data.results || []);
-    } catch (error) {
-      console.error("Error fetching shows sorted by rating:", error);
-      setShows([]);
-    }
+    const url = `https://api.themoviedb.org/3/tv/popular?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1&include_adult=false`;
+    return fetchShows(url);
   };
 
   const searchMovies = async (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-
+    e.preventDefault();
     const searchURL = `https://api.themoviedb.org/3/search/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
-
-    try {
-      if (searchTerm.trim() === "") {
-        fetchMoviesByGenres(genre);
-      } else {
-        const response = await axios.get(searchURL);
-        setShows(response.data.results || []);
-      }
-    } catch (error) {
-      console.error("Error searching shows:", error);
-      setShows([]);
+    if (searchTerm.trim() === "") {
+      fetchMoviesByGenres(genre).then((data) => setShows(data));
+    } else {
+      fetchShows(searchURL).then((data) => setShows(data));
     }
   };
 
   useEffect(() => {
     if (sortBy === "vote_average.desc") {
-      fetchMoviesSortedByRating();
+      fetchMoviesSortedByRating().then((data) => setShows(data));
     } else {
-      fetchMoviesByGenres(genre);
+      fetchMoviesByGenres(genre).then((data) => setShows(data));
     }
-  }, [sortBy]);
+  }, [sortBy, genre]);
+
 
   useEffect(() => {
-    const delaySearch = setTimeout(searchMovies, 300);
-    return () => clearTimeout(delaySearch);
-  }, [searchTerm]);
+    const initialRender = async () => {
+      const trendingURL = `https://api.themoviedb.org/3/trending/tv/week?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`;
+      const trendingShows = await fetchShows(trendingURL);
+      setShows(trendingShows);
+    };
+
+    initialRender();
+  }, []);
 
   return (
     <>
@@ -90,7 +76,6 @@ const ShowsScreen = ({ setMovies }) => {
                 alt="Netflix Logo"
               />
             </Link>
-
             <Link to={"/movies"}>
               <h3 className="navM__link">Movies</h3>
             </Link>
@@ -98,7 +83,6 @@ const ShowsScreen = ({ setMovies }) => {
               <h3 className="navM__link current">TV Shows</h3>
             </Link>
           </div>
-
           <div>
             <Link to={"/profile"}>
               <img className="navM__avatar" src={Avatar} alt="Profile Avatar" />
@@ -106,14 +90,10 @@ const ShowsScreen = ({ setMovies }) => {
           </div>
         </div>
       </nav>
-
       <div className="moviesScreen">
         <div className="container">
           <div className="above__title">
-            <form
-              className="search__bar__container"
-              onSubmit={(e) => searchMovies(e)}
-            >
+            <form className="search__bar__container" onSubmit={searchMovies}>
               <input
                 className="search__bar"
                 type="text"
@@ -125,48 +105,33 @@ const ShowsScreen = ({ setMovies }) => {
                 <FontAwesomeIcon className="faSearch" icon={faSearch} />
               </button>
             </form>
-
             <select
               className="filter___dropdown"
               onChange={(e) => setSortBy(e.target.value)}
               value={sortBy}
             >
-              <option
-                className="filter___dropdown__option"
-                value="popularity.desc"
-              >
-                Popular
-              </option>
-              <option
-                className="filter___dropdown__option"
-                value="vote_average.desc"
-              >
-                Rating
-              </option>
+              <option className="filter___dropdown__option" value="popularity.desc">Popular</option>
+              <option className="filter___dropdown__option" value="vote_average.desc">Rating</option>
             </select>
           </div>
-
-         
-          <TVShowsGenreTags setShows={setShows} handleTagClick={handleTagClick} />
-
+          <TVShowsGenreTags setShows={setShows} handleTagClick={fetchMoviesByGenres} />
           <h1 className="movies__title">
-            {searchTerm
-              ? `Search results for "${searchTerm}"`
-              : "Popular TV Shows"}
+            {searchTerm ? `Search results for "${searchTerm}"` : "Popular TV Shows"}
           </h1>
-
           <div className="movies__content">
-            {shows.length > 0
-              ? shows.map((show) => (
-                  <Movie
-                    key={show.id}
-                    title={show.name}
-                    posterPath={`https://image.tmdb.org/t/p/original${show.poster_path}`}
-                  />
-                ))
-              : Array.from({ length: 20 }).map((_, index) => (
-                  <SkeletonMovie key={index} />
-                ))}
+            {shows.length > 0 ? (
+              shows.map((show) => (
+                <Movie
+                  key={show.id}
+                  title={show.name}
+                  posterPath={show.poster_path}
+                />
+              ))
+            ) : (
+              Array.from({ length: 20 }).map((_, index) => (
+                <SkeletonMovie key={index} />
+              ))
+            )}
           </div>
         </div>
       </div>
