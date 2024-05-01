@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "../axios.js";
 import { Link, useParams } from "react-router-dom";
 import Movie from "../Movie";
@@ -25,6 +25,20 @@ const ShowsScreen = () => {
     }
   };
 
+  useEffect(() => {
+    const initialRender = async () => {  
+      const trendingURL = `https://api.themoviedb.org/3/trending/tv/week?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`;
+      try {
+        const trendingShows = await fetchShows(trendingURL);
+        setShows(trendingShows);
+      } catch (error) {
+        console.error("Error fetching trending shows:", error);
+      }
+    };
+  
+    initialRender();
+  }, []);
+
   const fetchMoviesByGenres = async (genreId) => {
     const url = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&with_genres=${genreId}&sort_by=${sortBy}&page=1&include_adult=false`;
     return fetchShows(url);
@@ -35,8 +49,7 @@ const ShowsScreen = () => {
     return fetchShows(url);
   };
 
-  const searchMovies = async (e) => {
-    e.preventDefault();
+  const searchMovies = async () => {
     const searchURL = `https://api.themoviedb.org/3/search/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
     if (searchTerm.trim() === "") {
       fetchMoviesByGenres(genre).then((data) => setShows(data));
@@ -45,6 +58,23 @@ const ShowsScreen = () => {
     }
   };
 
+  const debouncedSearchMovies = useMemo(() => {
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    };
+    return debounce(searchMovies, 300);
+  }, [searchMovies]);
+
+  useEffect(() => {
+    debouncedSearchMovies();
+  }, [debouncedSearchMovies]);
+
   useEffect(() => {
     if (sortBy === "vote_average.desc") {
       fetchMoviesSortedByRating().then((data) => setShows(data));
@@ -52,17 +82,6 @@ const ShowsScreen = () => {
       fetchMoviesByGenres(genre).then((data) => setShows(data));
     }
   }, [sortBy, genre]);
-
-
-  useEffect(() => {
-    const initialRender = async () => {
-      const trendingURL = `https://api.themoviedb.org/3/trending/tv/week?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`;
-      const trendingShows = await fetchShows(trendingURL);
-      setShows(trendingShows);
-    };
-
-    initialRender();
-  }, []);
 
   return (
     <>
@@ -93,7 +112,7 @@ const ShowsScreen = () => {
       <div className="moviesScreen">
         <div className="container">
           <div className="above__title">
-            <form className="search__bar__container" onSubmit={searchMovies}>
+            <form className="search__bar__container">
               <input
                 className="search__bar"
                 type="text"
@@ -101,7 +120,7 @@ const ShowsScreen = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button type="submit" className="search__button">
+              <button type="button" className="search__button" onClick={debouncedSearchMovies}>
                 <FontAwesomeIcon className="faSearch" icon={faSearch} />
               </button>
             </form>
