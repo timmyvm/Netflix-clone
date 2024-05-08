@@ -75,27 +75,33 @@ const TVShowsGenreTags = ({ setShows }) => {
     },
 ];
 
-  const handleTagClick = async (id) => {
-    let updatedTags;
-    if (clickedTags.includes(id)) {
-      updatedTags = clickedTags.filter((tagId) => tagId !== id);
-    } else {
-      updatedTags = [...clickedTags, id];
-    }
-    setClickedTags(updatedTags);
+// https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
+//   ","
+// )}`
 
-    
-    const fetchURL = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
-      ","
-    )}`;
-    try {
-      const response = await axios.get(fetchURL);
-      setShows(response.data.results || []);
-    } catch (error) {
-      console.error("Error fetching TV shows:", error);
-      setShows([]);
-    }
-  };
+ 
+const handleTagClick = async (id) => {
+  let updatedTags;
+  if (clickedTags.includes(id)) {
+    updatedTags = clickedTags.filter((tagId) => tagId !== id);
+  } else {
+    updatedTags = [...clickedTags, id];
+  }
+  setClickedTags(updatedTags);
+
+  
+  const fetchURLShows = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&with_genres=${updatedTags.join(
+    ","
+   )}`;
+  try {
+    const responseMovies = await axios.get(fetchURLShows);
+    setShows(responseMovies.data.results || []);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    setShows([]);
+  }
+};
+
 
   return (
     <div id="tags">

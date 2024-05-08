@@ -10,6 +10,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ShowsScreen from "./screens/ShowsScreen";
 import MoviesScreen from "./screens/MoviesScreen";
 import LoadingScreen from "./screens/LoadingScreen"; 
+import MovieScreen from "./screens/MovieScreen";
 
 function App() {
   const user = useSelector(selectUser);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/movies" element={<MoviesScreen/>}/>
+            <Route path="/word" element={<MovieScreen/>}/>
             <Route path="/shows" element={<ShowsScreen/>}/>
           </Routes>
         )}
