@@ -51,8 +51,10 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/movies" element={<MoviesScreen/>}/>
-            <Route path="/word" element={<MovieScreen/>}/>
             <Route path="/shows" element={<ShowsScreen/>}/>
+            
+            <Route path="/tv" element={<MovieScreen/>}/>
+            <Route path="/movie" element={<MovieScreen/>}/>
           </Routes>
         )}
       </Router>
