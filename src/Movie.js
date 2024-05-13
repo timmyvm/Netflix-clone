@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 const Movie = ({ title, posterPath }) => {
   const base_url = "https://image.tmdb.org/t/p/original/";
   const [mediaType, setMediaType] = useState(null);
+  const [movieId, setMovieId] = useState(null);
+  const [tvId, setTvId] = useState(null);
 
   const handleMovieClick = async () => {
     try {
@@ -18,9 +20,11 @@ const Movie = ({ title, posterPath }) => {
         setMediaType(type);
 
         if (type === "movie") {
-          console.log("This is a movie");
-        } else if (type === "tv") {
-          console.log("This is a TV show");
+          const id = data.results[0].id;
+          setMovieId(id);
+        } else if (type === "tv"){
+          const id = data.results[0].id;
+          setTvId(id);
         }
       }
     } catch (error) {
@@ -30,14 +34,21 @@ const Movie = ({ title, posterPath }) => {
 
   return (
     <div className="movie" onClick={handleMovieClick}>
-      {mediaType && (
-        <Link to={mediaType === "movie" ? "/movie" : "/tv"}>
+      {mediaType !== null && (
+        <Link to={mediaType === "movie" ? `/movie/${movieId}` : `/tv/${tvId}`}>
           <img
             className="movie__poster"
             src={base_url + posterPath}
             alt={title}
           />
         </Link>
+      )}
+      {mediaType === null && (
+        <img
+          className="movie__poster"
+          src={base_url + posterPath}
+          alt={title}
+        />
       )}
     </div>
   );

@@ -52,9 +52,9 @@ function App() {
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/movies" element={<MoviesScreen/>}/>
             <Route path="/shows" element={<ShowsScreen/>}/>
-            
-            <Route path="/tv" element={<MovieScreen/>}/>
-            <Route path="/movie" element={<MovieScreen/>}/>
+
+            <Route path="/tv/:id" element={<MovieScreen/>}/>
+            <Route path="/movie/:id" element={<MovieScreen/>}/>
           </Routes>
         )}
       </Router>
