@@ -1,0 +1,85 @@
+.movie-screen {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #121212;
+    color: white;
+    padding: 20px;
+  }
+  
+  .movie-image {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .movie-image img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .movie-details {
+    flex: 2;
+    padding: 20px;
+  }
+  
+  .movie-title {
+    font-size: 4em;
+    margin-bottom: 10px;
+  }
+  
+  .movie-info {
+    font-size: 0.8em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .movie-overview {
+    margin-bottom: 20px;
+  }
+  
+  .movie-meta {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .movie-release-date, .movie-rating {
+    font-size: 1em;
+  }
+
+  .container_movie{
+    margin: 50px 200px;
+    display: flex;
+    padding-right: 100px;
+    padding-left: 100px;
+  }
+  
+.movie-language{
+    font-size: 1.5em;
+    font-weight: 800;
+    border: 3px solid white;
+    padding: 3px;
+    margin: none;
+}
+
+.movie-genres{
+    display: flex;
+    padding-left: 10px;
+}
+
+.movie-runtime{
+    padding-left: 10px;
+}
+
+.recco-title{
+    color: white;
+    
+}
+
+.recco-container{
+    padding-top: 100px;
+}
+
+.recommended-movies{
+    display: flex;
+}
+
