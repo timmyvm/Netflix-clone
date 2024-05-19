@@ -1,57 +1,62 @@
 import React, { useState, useEffect } from "react";
-import "./MovieScreen.css";
-import Movie from "../../src/Movie";
+import { Link, useParams } from "react-router-dom";
+import axios from "../axios.js";
 import Avatar from "../../src/assets/download.png";
-import { Link } from "react-router-dom";
+import "./MovieScreen.css";
 
-export default function MovieScreen() {
+const MovieScreen = () => {
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchMovie = async () => {
       try {
-        const response = await fetch(
-          "https://api.themoviedb.org/3/movie/popular?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1"
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${id}?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`
         );
-        const data = await response.json();
-        setMovies(data.results);
+        const data = response.data;
+        console.log(data);
+        // set your state here with the data, if you want to display it
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error("Error fetching movie:", error);
       }
     };
 
-    fetchMovies();
-  }, []);
+    if (id) {
+      fetchMovie();
+    }
+  }, [id]);
 
   return (
     <>
       <nav>
         <div className="navM__contents">
           <div className="navM__left">
-            <Link to={"/"}>
+            <Link to="/">
               <img
                 className="navM__logo"
                 src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
                 alt="Netflix Logo"
               />
             </Link>
-            <Link to={"/movies"}>
+            <Link to="/movies">
               <h3 className="navM__link">Movies</h3>
             </Link>
-            <Link to={"/shows"}>
+            <Link to="/shows">
               <h3 className="navM__link current">TV Shows</h3>
             </Link>
           </div>
           <div>
-            <Link to={"/profile"}>
+            <Link to="/profile">
               <img className="navM__avatar" src={Avatar} alt="Profile Avatar" />
             </Link>
           </div>
         </div>
       </nav>
-
-
      
 
+     
     </>
   );
-}
+};
+
+export default MovieScreen;

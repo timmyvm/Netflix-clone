@@ -26,28 +26,33 @@ const MoviesScreen = () => {
     }
   }, []);
 
-  const fetchMoviesByGenres = useCallback(async (sort) => {
-    const fetchURLs = [
-      requests.fetchTrending,
-      requests.fetchTopRated,
-      requests.fetchActionMovies,
-      requests.fetchComedyMovies,
-      requests.fetchHorrorMovies,
-      requests.fetchRomanceMovies,
-      requests.fetchDocumentaries,
-    ];
+  const fetchMoviesByGenres = useCallback(
+    async (sort) => {
+      const fetchURLs = [
+        requests.fetchTrending,
+        requests.fetchTopRated,
+        requests.fetchActionMovies,
+        requests.fetchComedyMovies,
+        requests.fetchHorrorMovies,
+        requests.fetchRomanceMovies,
+        requests.fetchDocumentaries,
+      ];
 
-    const allMovies = [];
-    for (const fetchURL of fetchURLs) {
-      const movies = await fetchData(fetchURL + `&sort_by=${sort}`);
-      movies.forEach((movie) => {
-        if (!allMovies.some((existingMovie) => existingMovie.id === movie.id)) {
-          allMovies.push(movie);
-        }
-      });
-    }
-    setMovies(allMovies);
-  }, [fetchData]);
+      const allMovies = [];
+      for (const fetchURL of fetchURLs) {
+        const movies = await fetchData(fetchURL + `&sort_by=${sort}`);
+        movies.forEach((movie) => {
+          if (
+            !allMovies.some((existingMovie) => existingMovie.id === movie.id)
+          ) {
+            allMovies.push(movie);
+          }
+        });
+      }
+      setMovies(allMovies);
+    },
+    [fetchData]
+  );
 
   const fetchMoviesSortedByRating = useCallback(async () => {
     try {
@@ -61,25 +66,28 @@ const MoviesScreen = () => {
     }
   }, [fetchData]);
 
-  const searchMovies = useCallback(async (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
-
-    try {
-      if (searchTerm.trim() === "") {
-        fetchMoviesByGenres(sortBy);
-      } else {
-        const response = await axios.get(searchURL);
-        setMovies(response.data.results || []);
+  const searchMovies = useCallback(
+    async (e) => {
+      if (e) {
+        e.preventDefault();
       }
-    } catch (error) {
-      console.error("Error searching movies:", error);
-      setMovies([]);
-    }
-  }, [searchTerm, sortBy, fetchMoviesByGenres]);
+
+      const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
+
+      try {
+        if (searchTerm.trim() === "") {
+          fetchMoviesByGenres(sortBy);
+        } else {
+          const response = await axios.get(searchURL);
+          setMovies(response.data.results || []);
+        }
+      } catch (error) {
+        console.error("Error searching movies:", error);
+        setMovies([]);
+      }
+    },
+    [searchTerm, sortBy, fetchMoviesByGenres]
+  );
 
   useEffect(() => {
     if (sortBy === "vote_average.desc") {
@@ -199,6 +207,7 @@ const MoviesScreen = () => {
                     posterPath={
                       movie.poster_path ? movie.poster_path : NoPoster
                     }
+                    movie={movie}
                   />
                 ))
               : Array.from({ length: 20 }).map((_, index) => (

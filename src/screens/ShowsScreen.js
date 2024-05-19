@@ -257,6 +257,7 @@ const ShowsScreen = () => {
                     key={show.id}
                     title={show.name}
                     posterPath={show.poster_path}
+                    show={show}
 
                   />
                 ))
