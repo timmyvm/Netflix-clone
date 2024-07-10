@@ -207,7 +207,8 @@ const MoviesScreen = () => {
                     posterPath={
                       movie.poster_path ? movie.poster_path : NoPoster
                     }
-                    movie={movie}
+                    mediaType="movie"
+                    id={movie.id}
                   />
                 ))
               : Array.from({ length: 20 }).map((_, index) => (

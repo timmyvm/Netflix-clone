@@ -11,6 +11,7 @@ import ShowsScreen from "./screens/ShowsScreen";
 import MoviesScreen from "./screens/MoviesScreen";
 import LoadingScreen from "./screens/LoadingScreen"; 
 import MovieScreen from "./screens/MovieScreen";
+import TvScreen from "./screens/TvScreen"
 
 function App() {
   const user = useSelector(selectUser);
@@ -53,7 +54,7 @@ function App() {
             <Route path="/movies" element={<MoviesScreen/>}/>
             <Route path="/shows" element={<ShowsScreen/>}/>
 
-            <Route path="/tv/:id" element={<MovieScreen/>}/>
+            <Route path="/tv/:id" element={<TvScreen/>}/>
             <Route path="/movie/:id" element={<MovieScreen/>}/>
           </Routes>
         )}

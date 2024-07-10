@@ -20,7 +20,7 @@ const ShowsScreen = () => {
       const response = await axios.get(fetchURL);
       return response.data.results;
     } catch (error) {
-      alert("Error fetching data:", error);
+      console.error("Error fetching data:", error);
       return [];
     }
   }, []);
@@ -39,7 +39,7 @@ const ShowsScreen = () => {
 
       const allShows = [];
       for (const fetchURL of fetchURLs) {
-        const shows = await fetchData(fetchURL + `&sort_by=${sort}`);
+        const shows = await fetchData(`${fetchURL}&sort_by=${sort}`);
         shows.forEach((show) => {
           if (!allShows.some((existingShow) => existingShow.id === show.id)) {
             allShows.push(show);
@@ -54,11 +54,11 @@ const ShowsScreen = () => {
   const fetchShowsSortedByRating = useCallback(async () => {
     try {
       const shows = await fetchData(
-        requests.fetchTopRatedTV + `&sort_by=vote_average.desc`
+        `${requests.fetchTopRatedTV}&sort_by=vote_average.desc`
       );
       setShows(shows);
     } catch (error) {
-      alert("Error fetching shows sorted by rating:", error);
+      console.error("Error fetching shows sorted by rating:", error);
       setShows([]);
     }
   }, [fetchData]);
@@ -79,7 +79,7 @@ const ShowsScreen = () => {
           setShows(response.data.results || []);
         }
       } catch (error) {
-        alert("Error searching shows:", error);
+        console.error("Error searching shows:", error);
         setShows([]);
       }
     },
@@ -118,62 +118,6 @@ const ShowsScreen = () => {
   useEffect(() => {
     debouncedSearchShows();
   }, [debouncedSearchShows]);
-
-  // const { genre } = useParams();
-
-  // const fetchShows = async (url) => {
-  //   try {
-  //     const response = await axios.get(url);
-  //     return response.data.results;
-  //   } catch (error) {
-  //     console.error("Error fetching shows:", error);
-  //     return [];
-  //   }
-  // };
-
-  // const fetchMoviesByGenres = async (genreId) => {
-  //   const url = `https://api.themoviedb.org/3/discover/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&with_genres=${genreId}&sort_by=${sortBy}&page=1&include_adult=false`;
-  //   return fetchShows(url);
-  // };
-
-  // const fetchMoviesSortedByRating = async () => {
-  //   const url = `https://api.themoviedb.org/3/tv/popular?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1&include_adult=false`;
-  //   return fetchShows(url);
-  // };
-
-  // const searchMovies = async () => {
-  //   const searchURL = `https://api.themoviedb.org/3/search/tv?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&query=${searchTerm}&page=1&include_adult=false`;
-  //   if (searchTerm.trim() === "") {
-  //     fetchMoviesByGenres(genre).then((data) => setShows(data));
-  //   } else {
-  //     fetchShows(searchURL).then((data) => setShows(data));
-  //   }
-  // };
-
-  // const debouncedSearchMovies = useMemo(() => {
-  //   const debounce = (func, delay) => {
-  //     let timeoutId;
-  //     return (...args) => {
-  //       clearTimeout(timeoutId);
-  //       timeoutId = setTimeout(() => {
-  //         func.apply(this, args);
-  //       }, delay);
-  //     };
-  //   };
-  //   return debounce(searchMovies, 300);
-  // }, [searchMovies]);
-
-  // useEffect(() => {
-  //   debouncedSearchMovies();
-  // }, [debouncedSearchMovies]);
-
-  // useEffect(() => {
-  //   if (sortBy === "vote_average.desc") {
-  //     fetchMoviesSortedByRating().then((data) => setShows(data));
-  //   } else {
-  //     fetchMoviesByGenres(genre).then((data) => setShows(data));
-  //   }
-  // }, [sortBy, genre]);
 
   return (
     <>
@@ -242,9 +186,7 @@ const ShowsScreen = () => {
               </option>
             </select>
           </div>
-          <TVShowsGenreTags
-            setShows={setShows}
-          />
+          <TVShowsGenreTags setShows={setShows} />
           <h1 className="movies__title">
             {searchTerm
               ? `Search results for "${searchTerm}"`
@@ -257,8 +199,6 @@ const ShowsScreen = () => {
                     key={show.id}
                     title={show.name}
                     posterPath={show.poster_path}
-                    show={show}
-
                   />
                 ))
               : Array.from({ length: 20 }).map((_, index) => (

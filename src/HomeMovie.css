@@ -1,0 +1,27 @@
+
+.home-movie {
+  position: relative;
+  margin: 0 20px;
+}
+
+.home-movie__poster {
+  max-height: 250px;
+  object-fit: cover;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.home-movie__posterLarge{
+  max-height: 450px;
+  height: 350px;
+  padding: 3%;
+  border-radius: 4px;
+}
+
+.home-movie__poster:hover {
+  opacity: 0.8;
+}
+
+.home-movie__posterSmall{
+  max-height: 300px;
+}

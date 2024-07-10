@@ -9,16 +9,13 @@ const HomeScreen = () => {
   return (
     <div className="homeScreen">
       <Nav />
-
       <Banner />
-
       <Row
         title="Trending Now"
         fetchURL={requests.fetchTrending}
-        isLargeRow
         isBigger
+        isLargeRow
       />
-
       <Row
         title="Top Rated Movies"
         fetchURL={requests.fetchTopRated}
