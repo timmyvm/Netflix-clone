@@ -19,7 +19,7 @@ const MovieScreen = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          ` https://api.themoviedb.org/3/movie/${id}?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US `
+          `https://api.themoviedb.org/3/movie/${id}?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`
         );
         setMovie(response.data);
         setLoading(false);
@@ -28,6 +28,7 @@ const MovieScreen = () => {
         setLoading(false);
       }
     };
+    
 
     if (id) {
       fetchMovie();
@@ -39,13 +40,13 @@ const MovieScreen = () => {
 
     try {
       const res = await axios.get(
-        ` https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1 `
+        `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1`
       );
 
       if (res.data.results.length === 0) {
         console.log("using similar instead");
         const res2 = await axios.get(
-          ` https://api.themoviedb.org/3/movie/${id}/similar?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1 `
+          `https://api.themoviedb.org/3/movie/${id}/similar?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US&page=1`
         );
         setRecommendedMovies(res2.data.results.slice(0, 4));
       } else {
@@ -84,7 +85,7 @@ const MovieScreen = () => {
               <h3 className="navM__link">Movies</h3>
             </Link>
             <Link to="/shows">
-              <h3 className="navM__link current">movie Shows</h3>
+              <h3 className="navM__link current">Shows</h3>
             </Link>
           </div>
           <div>
@@ -96,17 +97,14 @@ const MovieScreen = () => {
       </nav>
 
       <div
-        className="movie-screen"
-        style={{
-          ...(movie?.backdrop_path
-            ? {
-                backgroundImage: (
-                  `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
-                ),
-              }
-            : {}),
-        }}
-      >
+  className="movie-screen"
+  style={{
+    backgroundImage: movie?.backdrop_path
+      ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+      : 'none',
+  }}
+>
+
         <div className="container_movie">
           <div className="movie-image">
             <img
@@ -124,7 +122,7 @@ const MovieScreen = () => {
                 {movie.genres.map((genre) => genre.name).join(", ")}
               </p>
               <p className="movie-runtime">
-                <FontAwesomeIcon icon={faClock} /> {movie.run_time}{" "}
+                <FontAwesomeIcon icon={faClock} /> {movie.run_time}
                 Episodes
               </p>
             </div>

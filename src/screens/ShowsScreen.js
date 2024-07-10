@@ -135,7 +135,7 @@ const ShowsScreen = () => {
               <h3 className="navM__link">Movies</h3>
             </Link>
             <Link to={"/shows"}>
-              <h3 className="navM__link current">TV Shows</h3>
+              <h3 className="navM__link current">Shows</h3>
             </Link>
           </div>
           <div>
