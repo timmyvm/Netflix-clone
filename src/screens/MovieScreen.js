@@ -28,7 +28,6 @@ const MovieScreen = () => {
         setLoading(false);
       }
     };
-    
 
     if (id) {
       fetchMovie();
@@ -97,19 +96,23 @@ const MovieScreen = () => {
       </nav>
 
       <div
-  className="movie-screen"
-  style={{
-    backgroundImage: movie?.backdrop_path
-      ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
-      : 'none',
-  }}
->
-
+        className="movie-screen"
+        style={{
+          backgroundImage: movie?.backdrop_path
+            ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+            : "none",
+        }}
+      >
         <div className="container_movie">
           <div className="movie-image">
             <img
               src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
+              alt="Movie Poster"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://payload.cargocollective.com/1/23/758880/13104445/NO-MOVIE-POSTERS-02-03-003_1000.jpg";
+              }}
             />
           </div>
           <div className="movie-details">
@@ -122,8 +125,8 @@ const MovieScreen = () => {
                 {movie.genres.map((genre) => genre.name).join(", ")}
               </p>
               <p className="movie-runtime">
-                <FontAwesomeIcon icon={faClock} /> {movie.run_time}
-                Episodes
+                <FontAwesomeIcon icon={faClock} /> {movie.runtime + " "}
+                Minutes
               </p>
             </div>
             <div className="movie-overview">
@@ -132,9 +135,17 @@ const MovieScreen = () => {
             </div>
             <div className="movie-meta">
               <div className="movie-release-date">
-                Release Date: {movie.first_air_date}
+                Release Date: {movie.release_date}
               </div>
               <div className="movie-rating">Rating: {movie.vote_average}</div>
+            </div>
+            <div className="button__container">
+              <button
+                className="watch__button"
+                onClick={() => alert("This Feature is not available")}
+              >
+                Watch
+              </button>
             </div>
           </div>
         </div>

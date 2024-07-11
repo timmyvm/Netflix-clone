@@ -16,19 +16,18 @@ const MovieScreen = () => {
 
   useEffect(() => {
     const fetchMovie = async () => {
-        try {
-          setLoading(true);
-          const response = await axios.get(
-            `https://api.themoviedb.org/3/tv/${id}?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`
-          );
-          setMovie(response.data);
-          setLoading(false);
-        } catch (error) {
-          console.error("Error fetching movie:", error);
-          setLoading(false);
-        }
-      };
-      
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/tv/${id}?api_key=3ef16179b4be2afc7c81bf6333abb5b5&language=en-US`
+        );
+        setMovie(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching movie:", error);
+        setLoading(false);
+      }
+    };
 
     if (id) {
       fetchMovie();
@@ -97,19 +96,23 @@ const MovieScreen = () => {
       </nav>
 
       <div
-  className="movie-screen"
-  style={{
-    backgroundImage: movie?.backdrop_path
-      ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
-      : 'none',
-  }}
->
-
+        className="movie-screen"
+        style={{
+          backgroundImage: movie?.backdrop_path
+            ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+            : "none",
+        }}
+      >
         <div className="container_movie">
           <div className="movie-image">
             <img
               src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
+              alt="Movie Poster"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://payload.cargocollective.com/1/23/758880/13104445/NO-MOVIE-POSTERS-02-03-003_1000.jpg";
+              }}
             />
           </div>
           <div className="movie-details">
@@ -122,7 +125,8 @@ const MovieScreen = () => {
                 {movie.genres.map((genre) => genre.name).join(", ")}
               </p>
               <p className="movie-runtime">
-                <FontAwesomeIcon icon={faClock} /> {movie.episode_run_time} 
+                <FontAwesomeIcon icon={faClock} />{" "}
+                {movie.number_of_episodes + " "}
                 Episodes
               </p>
             </div>
@@ -135,6 +139,14 @@ const MovieScreen = () => {
                 Release Date: {movie.first_air_date}
               </div>
               <div className="movie-rating">Rating: {movie.vote_average}</div>
+            </div>
+            <div className="button__container">
+              <button
+                className="watch__button"
+                onClick={() => alert("This Feature is not available")}
+              >
+                Watch
+              </button>
             </div>
           </div>
         </div>

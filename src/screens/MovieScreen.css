@@ -4,12 +4,22 @@
   background-color: #121212;
   color: white;
   padding: 20px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
 }
-
 
 .movie-screen::before {
-  opacity: 0.1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity value here */
+  pointer-events: none;
 }
+
 .movie-image {
   flex: 1;
   min-width: 300px;
@@ -28,12 +38,6 @@
 .movie-title {
   font-size: 4em;
   margin-bottom: 10px;
-}
-
-.movie-screen {
-  position: relative;
-  background-size: cover;
-  background-position: center;
 }
 
 .backdrop-overlay {
@@ -84,7 +88,6 @@
   font-weight: 800;
   border: 3px solid white;
   padding: 3px;
-  margin: none;
 }
 
 .movie-genres {
@@ -98,6 +101,8 @@
 
 .recco-title {
   color: white;
+  padding-left: 110px;
+  padding-bottom: 30px;
 }
 
 .recco-container {
@@ -106,4 +111,31 @@
 
 .recommended-movies {
   display: flex;
+}
+
+.button__container{
+  margin-top: 35px ;
+}
+
+.watch__button {
+  background-color: #e50914;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.watch__button:hover {
+  background-color: #f40612;
+  transform: scale(1.05);
+}
+
+.watch__button:active {
+  background-color: #d40813;
+  transform: scale(1);
 }

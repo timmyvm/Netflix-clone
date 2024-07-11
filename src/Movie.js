@@ -57,7 +57,12 @@ const Movie = ({ title, posterPath }) => {
         <img
           className="movie__poster"
           src={base_url + posterPath}
-          alt={title} 
+          alt="Movie Poster"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src =
+              "https://payload.cargocollective.com/1/23/758880/13104445/NO-MOVIE-POSTERS-02-03-003_1000.jpg";
+          }}
           onClick={() => console.log(`Navigating to: ${generateLink()}`)}
         />
       </Link>
